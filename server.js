@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 // Load routes
 const authRoutes = require("./routes/authRoutes");
+const deskRoutes = require("./routes/deskRoutes");
 const app = express();
 
 // Middleware
@@ -12,6 +13,7 @@ app.use(cors());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use('/api/desks', deskRoutes);
 
 // Database Connection
 mongoose
