@@ -1,4 +1,5 @@
 const Desk = require('../models/Desk.js');
+const Student = require('../models/student');
 
 exports.addDesk = async (deskData) => {
     const existing = await Desk.findOne({ deskNumber: deskData.deskNumber });
@@ -31,4 +32,47 @@ exports.deleteDesk = async (deskId) => {
 // Get all desks
 exports.getAllDesks = async () => {
     return await Desk.find();
+};
+
+// Assign desk to student
+exports.assignDesk = async (studentId, deskId) => {
+    const student = await Student.findById(studentId);
+    if (!student) throw new Error('Student not found');
+
+    const desk = await Desk.findById(deskId);
+    if (!desk) throw new Error('Desk not found');
+
+    if (desk.status === 'occupied') {
+        throw new Error('Desk already occupied');
+    }
+
+    student.assignedDesk = deskId;
+    await student.save();
+
+    desk.status = 'occupied';
+    await desk.save();
+
+    return { student, desk };
+};
+
+// Unassign desk from student
+exports.unassignDesk = async (studentId) => {
+    const student = await Student.findById(studentId);
+    if (!student) throw new Error('Student not found');
+
+    if (!student.assignedDesk) {
+        throw new Error('Student does not have an assigned desk');
+    }
+
+    const deskId = student.assignedDesk;
+    const desk = await Desk.findById(deskId);
+    if (!desk) throw new Error('Assigned desk not found');
+
+    student.assignedDesk = null;
+    await student.save();
+
+    desk.status = 'available';
+    await desk.save();
+
+    return { studentId, deskId };
 };

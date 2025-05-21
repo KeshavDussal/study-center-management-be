@@ -44,3 +44,25 @@ exports.getAllDesks = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// POST /api/desks/assign
+exports.assignDesk = async (req, res) => {
+    try {
+        const { studentId, deskId } = req.body;
+        const result = await deskService.assignDesk(studentId, deskId);
+        res.status(200).json({ message: 'Desk assigned successfully', data: result });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+// POST /api/desks/unassign
+exports.unassignDesk = async (req, res) => {
+    try {
+        const { studentId } = req.body;
+        const result = await deskService.unassignDesk(studentId);
+        res.status(200).json({ message: 'Desk unassigned successfully', data: result });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};

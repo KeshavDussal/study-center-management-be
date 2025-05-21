@@ -9,6 +9,11 @@ const deskSchema = new mongoose.Schema({
     hasSocket: {
         type: Boolean,
         default: false
+    },
+    status: {               // Add status field to track availability
+        type: String,
+        enum: ['available', 'occupied'],
+        default: 'available'
     }
 }, { timestamps: true });
 module.exports = mongoose.model("Desk", deskSchema);
