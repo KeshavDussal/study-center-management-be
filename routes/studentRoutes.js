@@ -6,13 +6,14 @@ const {
     getStudent,
     getAllStudents
 } = require('../controllers/studentController');
+const { authenticate } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.post('/', createStudent);
-router.put('/:id', updateStudent);
-router.delete('/:id', deleteStudent);
-router.get('/:id', getStudent);
-router.get('/', getAllStudents);
+router.post('/', authenticate, createStudent);
+router.put('/:id', authenticate, updateStudent);
+router.delete('/:id', authenticate, deleteStudent);
+router.get('/:id', authenticate, getStudent);
+router.get('/', authenticate, getAllStudents);
 
 module.exports = router;

@@ -47,6 +47,7 @@ exports.assignDesk = async (studentId, deskId) => {
     }
 
     student.assignedDesk = deskId;
+    student.deskAssignedAt = new Date();   // Set current date when assigning
     await student.save();
 
     desk.status = 'occupied';
@@ -76,3 +77,17 @@ exports.unassignDesk = async (studentId) => {
 
     return { studentId, deskId };
 };
+
+exports.getAssignedDesksBetweenDates = async (fromDate, toDate) => {
+    const from = new Date(fromDate);
+    const to = new Date(toDate);
+
+    // Find all students assigned desks between from and to dates (inclusive)
+    const assignedStudents = await Student.find({
+        assignedDesk: { $ne: null },
+        deskAssignedAt: { $gte: from, $lte: to }
+    }).populate('assignedDesk');
+
+    return assignedStudents;
+};
+

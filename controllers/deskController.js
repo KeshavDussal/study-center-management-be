@@ -66,3 +66,23 @@ exports.unassignDesk = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+exports.getAssignedDesksReport = async (req, res) => {
+    try {
+        const { from, to } = req.query;
+
+        if (!from || !to) {
+            return res.status(400).json({ message: 'Both from and to dates are required' });
+        }
+
+        const data = await deskService.getAssignedDesksBetweenDates(from, to);
+
+        if (data.length === 0) {
+            return res.status(404).json({ message: 'No desk assignments found between these dates.' });
+        }
+
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

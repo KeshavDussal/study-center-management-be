@@ -6,6 +6,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const deskRoutes = require("./routes/deskRoutes");
 const studentRoutes = require('./routes/studentRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const app = express();
 
 // Middleware
@@ -16,6 +17,7 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use('/api/desks', deskRoutes);
 app.use('/api/students', studentRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Database Connection
 mongoose
